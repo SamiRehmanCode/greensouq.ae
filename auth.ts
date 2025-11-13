@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { compare } from "bcryptjs"
-import { prisma } from "@/lib/prisma"
+import { db } from "@/lib/prisma"
 
 const authOptions = {
   providers: [
@@ -17,7 +17,7 @@ const authOptions = {
           throw new Error("Email and password required")
         }
 
-        const user = await prisma.user.findUnique({
+        const user = await db.user.findUnique({
           where: { email: credentials.email },
         })
 
@@ -68,13 +68,13 @@ const authOptions = {
           }
 
           // Find or create user
-          let user = await prisma.user.findUnique({
+          let user = await db.user.findUnique({
             where: { email: profile.email },
           })
 
           if (!user) {
             // Create new user for Google sign-in (no password needed)
-            user = await prisma.user.create({
+            user = await db.user.create({
               data: {
                 email: profile.email,
                 name: profile.name,

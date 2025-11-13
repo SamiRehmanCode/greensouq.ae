@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/auth"
-import { prisma } from "@/lib/prisma"
+import { db, getUserWithFavorites } from "@/lib/prisma"
 
 // GET - Fetch user's favorites
 export async function GET(req: Request) {
@@ -12,20 +12,17 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const user = await prisma.user.findUnique({
+    const user = await db.user.findUnique({
       where: { email: session.user.email },
-      include: {
-        favorites: {
-          orderBy: { createdAt: "desc" },
-        },
-      },
     })
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    return NextResponse.json({ favorites: user.favorites })
+    const userWithFavorites = await getUserWithFavorites(user.id)
+
+    return NextResponse.json({ favorites: userWithFavorites?.favorites || [] })
   } catch (error) {
     console.error("Get favorites error:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
@@ -47,7 +44,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Song name required" }, { status: 400 })
     }
 
-    const user = await prisma.user.findUnique({
+    const user = await db.user.findUnique({
       where: { email: session.user.email },
     })
 
@@ -55,7 +52,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    const favorite = await prisma.favorite.create({
+    const favorite = await db.favorite.create({
       data: {
         songName: songName.trim(),
         userId: user.id,
@@ -65,7 +62,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ favorite }, { status: 201 })
   } catch (error: any) {
     // Handle unique constraint violation
-    if (error.code === "P2002") {
+    if (error.message === "P2002") {
       return NextResponse.json({ error: "Song already in favorites" }, { status: 400 })
     }
     console.error("Add favorite error:", error)
@@ -89,7 +86,7 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: "Favorite ID required" }, { status: 400 })
     }
 
-    const user = await prisma.user.findUnique({
+    const user = await db.user.findUnique({
       where: { email: session.user.email },
     })
 
@@ -98,7 +95,7 @@ export async function DELETE(req: Request) {
     }
 
     // Ensure the favorite belongs to the user
-    const favorite = await prisma.favorite.findFirst({
+    const favorite = await db.favorite.findFirst({
       where: {
         id,
         userId: user.id,
@@ -109,7 +106,7 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: "Favorite not found" }, { status: 404 })
     }
 
-    await prisma.favorite.delete({
+    await db.favorite.delete({
       where: { id },
     })
 
