@@ -172,17 +172,15 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Google Login */}
+          {/* Google Login (disabled) */}
           <div className="w-full flex justify-center">
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={handleGoogleError}
-              useOneTap={false}
-              theme="outline"
-              size="large"
-              text="signin_with"
-              shape="rectangular"
-            />
+            <Button
+              disabled
+              className="w-full max-w-xs h-12 bg-gray-100 text-gray-500 cursor-not-allowed"
+              title="Google login is temporarily disabled"
+            >
+              Sign in with Google (disabled)
+            </Button>
           </div>
 
           {/* Switch to Signup */}
