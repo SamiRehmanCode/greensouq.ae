@@ -9,24 +9,19 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "GreenSouq - Premium Plants & Gardening",
-  description: "Shop premium indoor and outdoor plants, seeds, and gardening supplies.",
-  generator: "v0.app",
+  title: "Full-Stack Developer | Abdul Rehman Asghar",
+  description:
+    "Professional portfolio of a MERN developer with expertise in WordPress plugins, PHP, Laravel, and RAG-based chatbot development.",
+  generator: "",
   icons: {
+
     icon: [
       {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
+        url: "/blank-favicon.svg",
         type: "image/svg+xml",
       },
     ],
+    // keep apple icon if you still want it available
     apple: "/apple-icon.png",
   },
 }
