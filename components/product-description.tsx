@@ -13,11 +13,10 @@ export function ProductDescription({ name, description, careInstructions }: Prod
       </div>
 
       <div>
-        <h3 className="text-xl font-bold text-black mb-4">Care Instructions</h3>
         <ul className="space-y-3">
           {careInstructions.map((instruction, index) => (
             <li key={index} className="flex gap-3">
-              <span className="text-[#9AD92B] font-bold flex-shrink-0">•</span>
+              <span className="text-[#0c0c0c] font-bold flex-shrink-0">•</span>
               <span className="text-gray-700">{instruction}</span>
             </li>
           ))}

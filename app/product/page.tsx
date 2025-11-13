@@ -90,36 +90,42 @@ export default function ProductPage() {
       {/* Main Content - 3 Column Layout */}
       <main className="bg-white px-4 md:px-12 py-8">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-          {/* Left: Thumbnail Gallery - 1 column */}
-          <div className="md:col-span-1">
+          {/* Main Image - appears first on mobile, center on md+ */}
+          <div className="order-1 md:order-1 md:col-span-6">
+            <ProductGallery.MainImage productName={product.name} />
+            {/* Thumbnails below main image on mobile for easier thumb tapping */}
+            <div className="md:hidden mt-4 px-1">
+              <ProductGallery.Thumbnails images={product.images} />
+            </div>
+          </div>
+
+          {/* Thumbnails - visible as a vertical column on md+ */}
+          <div className="order-2 md:order-0 md:col-span-1 hidden md:block">
             <ProductGallery.Thumbnails images={product.images} />
           </div>
 
-          {/* Center: Main Product Image - 6 columns */}
-          <div className="md:col-span-6">
-            <ProductGallery.MainImage productName={product.name} />
-          </div>
-
-          {/* Right: Product Details - 5 columns */}
-          <div className="md:col-span-5">
-            <ProductDetails
-              name={product.name}
-              price={product.price}
-              originalPrice={product.originalPrice}
-              category={product.category}
-              inStock={product.inStock}
-            />
+          {/* Product Details - stacked below images on mobile, sticky on desktop */}
+          <div className="order-3 md:order-2 md:col-span-5">
+            <div className="md:sticky md:top-28">
+              <ProductDetails
+                name={product.name}
+                price={product.price}
+                originalPrice={product.originalPrice}
+                category={product.category}
+                inStock={product.inStock}
+              />
+              {/* Product Description */}
+              <div className="">
+                <ProductDescription
+                  name="Moth Orchids"
+                  description={product.description}
+                  careInstructions={product.careInstructions}
+                />
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Product Description */}
-        <div className="mt-16 border-t pt-12">
-          <ProductDescription
-            name="Moth Orchids"
-            description={product.description}
-            careInstructions={product.careInstructions}
-          />
-        </div>
 
         {/* Related Products */}
         <div className="mt-16">

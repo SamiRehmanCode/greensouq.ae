@@ -42,14 +42,14 @@ export function Header() {
             </select>
 
             {/* Search Input */}
-            <div className="relative flex-1">
+            <div className="relative flex-[2]">
               <Input
-                type="text"
-                placeholder="What are you looking for?"
-                className="w-full px-4 py-2 border border-gray-400 rounded bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+              type="text"
+              placeholder="What are you looking for?"
+              className="w-full px-4 py-3 text-lg border border-gray-400 rounded bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
               />
-              <Button className="absolute right-2 top-1/2 -translate-y-1/2 p-2 h-auto bg-black hover:bg-gray-900 text-white rounded">
-                <Search size={18} />
+              <Button className="absolute right-1 top-1/2 -translate-y-1/2 px-5 py-2 h-auto bg-black hover:bg-gray-900 text-white rounded">
+              <Search size={24} />
               </Button>
             </div>
           </div>
@@ -79,7 +79,7 @@ export function Header() {
         </div>
       </div>
 
-      {/* Navigation Bar */}
+      {/* Navigation Bar
       <nav className="hidden md:flex bg-white border-t border-gray-200 px-12 overflow-x-auto">
         <div className="flex gap-8">
           {navItems.map((item) => (
@@ -92,7 +92,7 @@ export function Header() {
             </Link>
           ))}
         </div>
-      </nav>
+      </nav> */}
 
       {/* Mobile Navigation */}
       {isMobileMenuOpen && (

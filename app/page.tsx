@@ -2,6 +2,7 @@
 
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import PostLoginModal from "@/components/post-login-modal"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Leaf, Truck, Award } from "lucide-react"
@@ -35,6 +36,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <PostLoginModal forceOpen />
 
       <main>
         {/* Hero Section */}

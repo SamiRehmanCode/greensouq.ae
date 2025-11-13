@@ -28,12 +28,13 @@ function Thumbnails({ images }: { images: string[] }) {
   const [selectedIndex, setSelectedIndex] = useState(0)
 
   return (
-    <div className="flex flex-col gap-3">
+    // Horizontal on small screens, vertical on md+
+    <div className="flex md:flex-col flex-row gap-3 md:overflow-visible overflow-x-auto py-2">
       {images.map((image, index) => (
         <button
           key={index}
           onClick={() => setSelectedIndex(index)}
-          className={`w-20 h-20 rounded-md border-2 overflow-hidden transition-colors flex-shrink-0 ${
+          className={`w-20 h-20 rounded-md border-2 overflow-hidden transition-colors shrink-0 ${
             index === selectedIndex ? "border-primary-lime" : "border-gray-300 hover:border-gray-400"
           }`}
         >

@@ -7,29 +7,58 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button"
 import { Music, ShoppingBag } from "lucide-react"
 
-export default function PostLoginModal() {
+export default function PostLoginModal({ forceOpen = false }: { forceOpen?: boolean }) {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState<boolean>(forceOpen)
+  const [isSelecting, setIsSelecting] = useState<boolean>(false)
 
   useEffect(() => {
+    // If `forceOpen` is set (e.g. on home page), always open the modal on mount.
+    if (forceOpen) {
+      setShowModal(true)
+      return
+    }
+
     // Show modal only once after login (check sessionStorage to avoid repeated displays)
     if (status === "authenticated" && !sessionStorage.getItem("loginModalShown")) {
       setShowModal(true)
       sessionStorage.setItem("loginModalShown", "true")
     }
-  }, [status])
+  }, [status, forceOpen])
 
-  const handleNavigation = (path: string) => {
+  const handleNavigation = async (path: string) => {
+    // Prevent multiple clicks
+    if (isSelecting) return
+    setIsSelecting(true)
+
+    // Close modal then navigate. The Dialog is controlled so this will update UI
     setShowModal(false)
-    router.push(path)
+
+    // Use router.push and await it if possible
+    try {
+      await router.push(path)
+    } catch (err) {
+      // If navigation fails, re-enable selection so user can try again
+      console.error(err)
+      setIsSelecting(false)
+    }
   }
 
-  if (!showModal || status !== "authenticated") return null
+  // If not showing, return null. If `forceOpen` is false, require authentication.
+  if (!showModal) return null
+  if (!forceOpen && status !== "authenticated") return null
 
   return (
-    <Dialog open={showModal} onOpenChange={setShowModal}>
-      <DialogContent className="sm:max-w-md">
+    <Dialog
+      open={showModal}
+      // Ignore any attempts to close the dialog from overlay clicks or ESC.
+      // We only change `showModal` programmatically (e.g. on navigation).
+      onOpenChange={(open) => {
+        if (open) setShowModal(true)
+      }}
+    >
+      <DialogContent showCloseButton={false} className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center text-[#9AD92B]">
             Welcome back, {session?.user?.name || "Friend"}! 🌱
@@ -43,6 +72,7 @@ export default function PostLoginModal() {
           {/* Song Page Button */}
           <Button
             onClick={() => handleNavigation("/favorites")}
+            disabled={isSelecting}
             className="w-full h-16 bg-[#9AD92B] text-black hover:bg-[#7fb51e] flex items-center justify-center gap-3 text-lg font-semibold"
           >
             <Music className="h-6 w-6" />
@@ -53,6 +83,7 @@ export default function PostLoginModal() {
           <Button
             onClick={() => handleNavigation("/product")}
             variant="outline"
+            disabled={isSelecting}
             className="w-full h-16 border-[#9AD92B] text-[#9AD92B] hover:bg-[#9AD92B] hover:text-black flex items-center justify-center gap-3 text-lg font-semibold"
           >
             <ShoppingBag className="h-6 w-6" />

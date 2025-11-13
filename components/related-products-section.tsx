@@ -34,7 +34,7 @@ export function RelatedProductsSection({ products }: RelatedProductsSectionProps
   return (
     <section className="py-8 border-t">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-black">You may also like</h2>
+        <h2 className=" mx-auto text-2xl font-bold text-black">You may also like</h2>
         <div className="flex gap-2">
           <Button variant="outline" size="icon" onClick={() => scroll("left")} className="border-gray-300">
             <ChevronLeft size={20} />
@@ -48,7 +48,7 @@ export function RelatedProductsSection({ products }: RelatedProductsSectionProps
       {/* Carousel */}
       <div
         id="products-carousel"
-        className="flex gap-4 overflow-x-auto pb-4 scroll-smooth"
+        className="flex gap-4 overflow-x-auto pb-4 scroll-smooth mx-auto"
         style={{ scrollBehavior: "smooth" }}
       >
         {products.map((product) => (
